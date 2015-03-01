@@ -99,13 +99,39 @@ var helpers_sources = fs.readdirSync(helpers_path)
 
 source_files = source_files.concat(helpers_sources);
 
+function license(str){
+// appends AGPL license
+    return '/** @licstart  The following is the entire license notice for the\n'+
+    ' *  JavaScript code in this page.\n'+
+    ' *\n'+
+    ' *\n'+
+    ' *   The JavaScript code in this page is free software: you can\n'+
+    ' *   redistribute it and/or modify it under the terms of the GNU\n'+
+    ' *   Affero General Public License as published by the Free Software\n'+
+    ' *   Foundation, either version 3 of the License, or (at your option)\n'+
+    ' *   any later version.  The code is distributed WITHOUT ANY WARRANTY;\n'+
+    ' *   without even the implied warranty of MERCHANTABILITY or FITNESS\n'+
+    ' *   FOR A PARTICULAR PURPOSE.  See the GNU AGPL for more details.\n'+
+    ' *\n'+
+    ' *   As additional permission under GNU AGPL version 3 section 7, you\n'+
+    ' *   may distribute non-source (e.g., minimized or compacted) forms of\n'+
+    ' *   that code without the copy of the GNU AGPL normally required by\n'+
+    ' *   section 4, provided you include this license notice and a URL\n'+
+    ' *   through which recipients can access the Corresponding Source.\n'+
+    ' *\n'+
+    ' *  @licend  The above is the entire license notice\n'+
+    ' *  for the JavaScript code in this page.\n'+
+    '*/\n'+str;
+}
 
 /**
  * Build the kiwi.js/kiwi.min.js files
  */
+
 concat(source_files, function (err, src) {
     if (!err) {
-        src = '(function (global, undefined) {\n\n' + src + '\n\n})(window);';
+
+        src = license('(function (global, undefined) {\n\n' + src + '\n\n})(window);');
 
         fs.writeFile(global.config.public_http + '/assets/kiwi.js', src, { encoding: FILE_ENCODING }, function (err) {
             if (!err) {
@@ -127,7 +153,7 @@ concat(source_files, function (err, src) {
         ast.mangle_names();
         src = ast.print_to_string();
 
-        fs.writeFile(global.config.public_http + '/assets/kiwi.min.js', src, { encoding: FILE_ENCODING }, function (err) {
+        fs.writeFile(global.config.public_http + '/assets/kiwi.min.js', license(src), { encoding: FILE_ENCODING }, function (err) {
             if (!err) {
                 console.log('Built kiwi.min.js');
             } else {
@@ -149,7 +175,7 @@ concat(source_files, function (err, src) {
  */
 concat([global.config.public_http + '/assets/libs/engine.io.js', global.config.public_http + '/assets/libs/engine.io.tools.js'], function (err, src) {
     if (!err) {
-        fs.writeFile(global.config.public_http + '/assets/libs/engine.io.bundle.js', src, { encoding: FILE_ENCODING }, function (err) {
+        fs.writeFile(global.config.public_http + '/assets/libs/engine.io.bundle.js', license(src), { encoding: FILE_ENCODING }, function (err) {
             if (!err) {
                 console.log('Built engine.io.bundle.js');
             } else {
@@ -165,7 +191,7 @@ concat([global.config.public_http + '/assets/libs/engine.io.js', global.config.p
         ast.mangle_names();
         src = ast.print_to_string();
 
-        fs.writeFile(global.config.public_http + '/assets/libs/engine.io.bundle.min.js', src, { encoding: FILE_ENCODING }, function (err) {
+        fs.writeFile(global.config.public_http + '/assets/libs/engine.io.bundle.min.js', license(src), { encoding: FILE_ENCODING }, function (err) {
             if (!err) {
                 console.log('Built engine.io.bundle.min.js');
             } else {
